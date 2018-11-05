@@ -330,6 +330,7 @@ function t.getPos()
   end
 end
 
+-- Runs goto with the correct arguments
 function t.gotoPos(name)
   if t.saved_positions[name] == nil then error('[ERROR] t.saved_positions['..name..'] is nil') end
   for i,v in ipairs(t.saved_positions[name]) do print(i,v) end -- temp
@@ -337,6 +338,7 @@ function t.gotoPos(name)
   t.goto(t.saved_positions[name].x, t.saved_positions[name].y, t.saved_positions[name].z, t.saved_positions[name].orientation)
 end
 
+-- Go to target coordanites
 -- Careful this breaks blocks.
 function t.goto(xTarget, yTarget, zTarget, orientationTarget)
   if not xTarget or not yTarget or not zTarget or not orientationTarget then

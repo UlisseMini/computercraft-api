@@ -29,7 +29,7 @@ local t = {}
 t.debug_level = 4
 
 -- Files
-t.logfile = 'val_lib.log'
+t.logfile = 'val_api.log'
 t.cordsfile = '.cords'
 t.posfile = 'savedPositions'
 
