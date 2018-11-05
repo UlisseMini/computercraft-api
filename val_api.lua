@@ -1,4 +1,4 @@
--- Valvates library for cordanite management and stuff.
+-- Valvates library for coordanite management and stuff.
 -- If you have an idea for feature make an issue or
 -- Create a pull request if you're a coder.
 -- A lot of stuff here is unfinished so
@@ -132,7 +132,7 @@ local function updatePositions()
   t.writeToFile.write(textutils.serialize(t.saved_positions), 'w')
 end
 
--- Get cords from file if file does not exist create one and set coords to 0,0,0,0
+-- Get cords from file, if file does not exist create one and set coords to 0,0,0,0
 function t.getCords()
   local cords
   local contents
@@ -148,6 +148,7 @@ function t.getCords()
     -- Creates cords file with 0,0,0,0 as values.
     t.writeToFile(textutils.serialize({x = 0, y = 0, z = 0, orientation = 0}), t.cordsfile, 'w')
   end
+
   file = fs.open(t.cordsfile, 'r') -- Opens cordsfile for reading.
   contents = file.readAll()
   if not contents then

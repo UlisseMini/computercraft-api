@@ -108,9 +108,9 @@ function t.writeToFile(msg, file, mode)
     file = t.logfile -- default
   end
 
-  fileHandle = fs.open(file, mode)
-  fileHandle.write(msg..'\n') -- Adds newline
-  fileHandle.close()
+  fileHandle = io.open(file, mode)
+  fileHandle:write(msg..'\n') -- Adds newline
+  fileHandle:close()
 end
 
 function t.log(msg, msg_debug_level)
@@ -148,8 +148,9 @@ function t.getCords()
     -- Creates cords file with 0,0,0,0 as values.
     t.writeToFile(textutils.serialize({x = 0, y = 0, z = 0, orientation = 0}), t.cordsfile, 'w')
   end
-  file = fs.open(t.cordsfile, 'r') -- Opens cordsfile for reading.
-  contents = file.readAll()
+
+  file = io.open(t.cordsfile, 'r') -- Opens cordsfile for reading.
+  contents = file:read("*all")
   if not contents then
     t.log('[ERROR] contents is nil, persistance will not work!')
     return
@@ -322,9 +323,9 @@ end
 
 function t.getPos()
   if fs.exists(t.posfile) then
-    file = fs.open(t.posfile, 'r')
-    t.saved_positions = textutils.unserialize(file.readAll())
-    file.close()
+    file = io.open(t.posfile, 'r')
+    t.saved_positions = textutils.unserialize(file:read("*all")())
+    file:close()
   else
     error('No file to get positions from.')
   end
