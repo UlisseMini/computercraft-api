@@ -13,7 +13,7 @@
 -- heres some untested example code
 
 --[[
-t = require('lib')
+t = require('val_api')
 t.x, t.y, t.z = gps.locate(0.5)
 -- In this example orientation is still set to north by default,
 -- if you want to find orientation you'll need code that compares cords

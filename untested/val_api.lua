@@ -1,23 +1,23 @@
--- Valvates library for cordanite management and stuff.
--- If you have an idea for feature make an issue or
--- Create a pull request if you're a coder.
--- A lot of stuff here is unfinished so
--- Be careful and tell me how to make it better :DD
-
--- WARNING!
--- Since the turtle writes his coordanites to a file you should
--- run fs.delete(t.cordsfile) when your program finishes!
--- if you don't then his coords will get all screwed up if he moved without updating his coords
-
--- If you're using gps you can manually set coords and then update them 
--- heres some untested example code
-
 --[[
-t = require('lib')
+Valvates library for cordanite management and stuff.
+If you have an idea for feature make an issue or
+Create a pull request if you're a coder.
+A lot of stuff here is unfinished so
+Be careful and tell me how to make it better :DD
+
+WARNING!
+Since the turtle writes his coordanites to a file you should
+run fs.delete(t.cordsfile) when your program finishes!
+if you don't then his coords will get all screwed up if he moved without updating his coords
+
+If you're using gps you can manually set coords and then update them
+heres some untested example code
+
+t = require('val_api')
 t.x, t.y, t.z = gps.locate(0.5)
--- In this example orientation is still set to north by default,
--- if you want to find orientation you'll need code that compares cords
--- after you move, i might add this later but for now its up to you! ;)
+In this example orientation is still set to north by default,
+if you want to find orientation you'll need code that compares cords
+after you move, i might add this later but for now its up to you! ;)
 
 --]]
 
@@ -46,7 +46,7 @@ local zDiff = {
   [3] = 0
 }
 
-local xDiff = { 
+local xDiff = {
   [0] = 0,
   [1] = 1,
   [2] = 0,
@@ -107,7 +107,7 @@ function t.writeToFile(msg, file, mode)
   if file == nil then
     file = t.logfile -- default
   end
-  
+
   fileHandle = fs.open(file, mode)
   fileHandle.write(msg..'\n') -- Adds newline
   fileHandle.close()
@@ -115,7 +115,7 @@ end
 
 function t.log(msg, msg_debug_level)
   -- Logging function
-  
+
   if msg_debug_level == nil then
     t.writeToFile('[WARNING] msg_debug_level is nil, defaulting to level 3 message info.', t.logfile)
     -- As a param this is already local.
@@ -141,7 +141,7 @@ function t.getCords()
     t.log('[WARNING] Without a cords file persistance will fail', 2)
     return -- Breaks from this function
   end
-  
+
   if not fs.exists(t.cordsfile) then
     t.log('[WARNING] t.cordsfile does not exist', 2)
     t.log('[INFO] Creating cordsfile...', 3)
@@ -227,7 +227,7 @@ function t.look(direction)
 
   -- Thanks to Incin for this bit of code :)
   if direction == t.orientation then return end
-  
+
   if (direction - t.orientation) % 2 == 0 then
     t.turnLeft()
     t.turnLeft()
@@ -333,7 +333,7 @@ end
 function t.gotoPos(name)
   if t.saved_positions[name] == nil then error('[ERROR] t.saved_positions['..name..'] is nil') end
   for i,v in ipairs(t.saved_positions[name]) do print(i,v) end -- temp
-  
+
   t.goto(t.saved_positions[name].x, t.saved_positions[name].y, t.saved_positions[name].z, t.saved_positions[name].orientation)
 end
 
