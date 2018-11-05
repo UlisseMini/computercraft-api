@@ -29,8 +29,8 @@ local t = {}
 t.debug_level = 4
 
 -- Files
-t.logfile = 'tLib.log'
-t.cordsfile = 'cords'
+t.logfile = 'val_lib.log'
+t.cordsfile = '.cords'
 t.posfile = 'savedPositions'
 
 local file -- Used for file management
