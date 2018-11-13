@@ -408,3 +408,11 @@
   z = 15,
   orientation = 2,
 }
+[DEBUG] Read file contents, trying to unserialize it
+[DEBUG] Got coordanites from file, they are
+{
+  y = -13,
+  x = 4,
+  z = 27,
+  orientation = 3,
+}

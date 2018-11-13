@@ -25,6 +25,9 @@ TODO:
 
 Here is an index that i think some programmers will find useful
 
+function t.dumpCoords()
+returns the current coordanaites in a table \w orientation
+
 function t.inTable(value, table)
 Checks if a value is in a table.
 
