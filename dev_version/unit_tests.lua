@@ -1,15 +1,17 @@
 -- Tester program used for making sure new versions work without bugs
+-- Fake cc api's
 fs        = require("fs")
 turtle    = require("turtle")
 textutils = require("textutils")
 
-local t    = require("val_lib")
-local os   = require("os")
-local math = require("math")
+-- My api
+local t       = require("val_api")
+
+local LuaUnit = require("luaunit")
+local os      = require("os")
+local math    = require("math")
 
 local startTime
-local defaultRetVal = "OK"
-
 t.debug_level = 3
 
 -- Helper functions
@@ -32,16 +34,22 @@ local function trueorfalse()
 end
 
 local function checkResults(re)
+  returnval = "OK"
   for k, v in pairs(re) do
-    print("Test."..k.." "..v)
+    print("Test "..k..": "..v)
+    returnval = "FAIL"
   end
+  return returnval
 end
 
+-- results of tests will be stored in here
 local results = {}
+-- tests functions will be put inside here
 local Test = {}
 
-function Test.positions()
+function Test:positions()
   -- There is a *VERY* small chance of this test failing from every movement returning false.
+  local retval = nil
   local startingPos = {
     x = t.x,
     y = t.y,
@@ -73,7 +81,7 @@ function Test.positions()
 
   -- If the coordanites are still 0, 0, 0, 0 then fail
   if textutils.serialize(middlePos) == textutils.serialize(startingPos) then
-    return "Coordanites did not change."
+    assertEquals(textutils.serialize(middlePos), textutils.serialize(startingPos))
   end
   --print(textutils.serialize(middlePos))
 
@@ -86,44 +94,10 @@ function Test.positions()
   }
 
   if textutils.serialize(endingPos) ~= textutils.serialize(startingPos) then
-    return "Failed to return to start."
+    assertNotEquals(textutils.serialize(endingPos), textutils.serialize(startingPos))
   end
 
-  return defaultRetVal
+  return retval
 end
 
-function Test.textutils()
-  local foo = {
-    x = 32,
-    y = 28,
-  }
-  local expected = "{\n  y = 28,\n  x = 32,\n}"
-
-  -- serialize then unserialize
-  local text = textutils.serialize(foo)
-
-  if text ~= expected then
-    return "textutils.serialize() did not return expected"
-  end
-
-  local bar = textutils.unserialize(text)
-
-  if bar.x ~= foo.x or bar.y ~= foo.y then
-    return "textutils.unserialize() failed"
-  end
-
-  return defaultRetVal
-end
-
--- Run tests
-for testname, testcase in pairs(Test) do
-  startTime = os.clock()
-  result = testcase()
-  if result ~= nil then
-    results[testname] = result
-  end
-end
-
-print(string.format("Ran "..table.size(Test).." Tests in %.5fs\n", os.clock() - startTime))
-
-checkResults(results)
+LuaUnit:run()

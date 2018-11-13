@@ -100,6 +100,15 @@ t.unWantedItems = {
   "minecraft:sand"
 }
 
+function t.dumpCoords()
+  return {
+    x = t.x,
+    y = t.y,
+    z = t.z,
+    orientation = t.orientation,
+  }
+end
+
 function t.inTable(value, table)
   for key, v in ipairs(table) do
     if value == value then
