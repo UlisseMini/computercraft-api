@@ -3,7 +3,6 @@ local math = require("math")
 local os   = require("os")
 
 local fs = {}
-local openFiles = {}
 
 -- Helper functions
 local function trueorfalse()
@@ -54,24 +53,22 @@ function fs.ReadAll(file)
   return file:read("*a")
 end
 
--- This is so hard UHGH
 function fs.open(file, mode)
   local f = {} -- Store fs files in here
-  openFiles[file] = io.open(file, mode)
+  local handle = io.open(file, mode)
 
   function f.readAll()
-    return openFiles[file]:read("*a")
+    return handle:read("*a")
   end
 
   function f.close()
-    openFiles[file]:close()
+    handle:close()
   end
 
   function f.write(data)
-    openFiles[file]:write(data)
+    handle:write(data)
   end
 
   return f
 end
-
 return fs
