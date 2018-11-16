@@ -52,7 +52,7 @@ Will not log the message if t.debug_level is less then msg_debug_level.
 function t.savePositionsToFile()
 Writes t.saved_positions to t.posfile
 
-function t.getCords()
+function t.init()
 this function gets the correct coordanites from the t.coordsfile file.
 if the file does not exist, it will create it and initalize the coordanites to 0,0,0,0
 
@@ -154,15 +154,15 @@ function t.writeToFile(msg, file, mode)
     return
   end
 
-  file = io.open(file, mode)
+  file = fs.open(file, mode)
 
   if file == nil then
     t.log("[ERROR] Failed to open "..file, 0)
     return
   end
 
-  file:write(msg.."\n") -- Adds newline
-  file:close()
+  file.write(msg.."\n") -- Adds newline
+  file.close()
 end
 
 function t.log(msg, msg_debug_level)
@@ -185,7 +185,7 @@ function t.log(msg, msg_debug_level)
 end
 
 -- Get coords from file if file does not exist create one and set coords to 0,0,0,0
-function t.getCords()
+function t.init()
   local coords
   local contents
   if t.coordsfile == nil then
@@ -213,13 +213,13 @@ function t.getCords()
     end
   end
 
-  file = io.open(t.coordsfile, "r") -- Opens coordsfile for reading.
+  file = fs.open(t.coordsfile, "r") -- Opens coordsfile for reading.
   if file == nil then
     t.log("[FATAL] Failed to open coordsfile, file is nil", 0)
   end
 
-  contents = file:read("*all")
-  file:close()
+  contents = file.readAll()
+  file.close()
 
   if contents == nil then
     t.log("[FATAL] Failed to read file contents", 0)
@@ -240,7 +240,9 @@ function t.getCords()
   -- Sets orientation
   t.orientation = coords.orientation
 
-  -- Not going to return a value since i will just change the varables.
+  -- Gets saved positions
+  t.getSavedPositions()
+  -- Not going to return a value since i'll just change the varables.
 end
 
 -- Saves coordanites to file
@@ -398,17 +400,39 @@ function t.saveCurrentPos(name)
     z = t.z,
     orientation = t.orientation
   }
+  t.savePositionsToFile()
 end
 
 function t.savePositionsToFile()
   t.writeToFile(textutils.serialize(t.saved_positions), t.posfile, "w")
 end
 
+function t.getSavedPositions()
+  if fs.exists(t.posfile) then
+    file = fs.open(t.posfile, "r")
+    local data = file.readAll()
+    file.close()
+
+    local positions = textutils.unserialize(data)
+    if type(positions) ~= "table" then
+      t.log("[ERROR] Failed to unserialize positions", 1)
+      return nil
+    end
+
+    return positions
+  else
+    -- Create one
+    local positions = {}
+    t.writeToFile(textutils.serialize(positions), t.posfile, "w")
+    return positions
+  end
+end
+
 function t.getPos()
   if fs.exists(t.posfile) then
-    file = io.open(t.posfile, "r")
-    t.saved_positions = textutils.unserialize(file:read("*all")())
-    file:close()
+    file = fs.open(t.posfile, "r")
+    t.saved_positions = textutils.unserialize(file.readAll())
+    file.close()
   else
     error("No file to get positions from.")
   end
@@ -475,5 +499,5 @@ function t.goto(xTarget, yTarget, zTarget, orientationTarget)
   t.look(orientationTarget)
 end
 -- Because its not defined at the top
-t.getCords()
+t.init()
 return t

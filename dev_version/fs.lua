@@ -3,6 +3,7 @@ local math = require("math")
 local os   = require("os")
 
 local fs = {}
+local openFiles = {}
 
 -- Helper functions
 local function trueorfalse()
@@ -31,7 +32,7 @@ local function isFile(name)
   if type(name)~="string" then return false end
   if not exists(name) then return false end
   local f = io.open(name)
-  local data = f:read("*all")
+  local data = f:read("*a")
   if data then
     f:close()
     return true
@@ -50,11 +51,26 @@ function fs.exists(file)
 end
 
 function fs.ReadAll(file)
-  file:read("*all")
+  return file:read("*a")
 end
 
+-- This is so hard UHGH
 function fs.open(file, mode)
-  local f = io.open(file, mode)
+  local f = {} -- Store fs files in here
+  openFiles[file] = io.open(file, mode)
+
+  function f.readAll()
+    return openFiles[file]:read("*a")
+  end
+
+  function f.close()
+    openFiles[file]:close()
+  end
+
+  function f.write(data)
+    openFiles[file]:write(data)
+  end
+
   return f
 end
 
