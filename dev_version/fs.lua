@@ -53,6 +53,9 @@ function fs.ReadAll(file)
   return file:read("*a")
 end
 
+-- It's called closure. Stuff defined in something gets access to locals from that thing.
+-- gollark
+
 function fs.open(file, mode)
   local f = {} -- Store fs files in here
   local handle = io.open(file, mode)
