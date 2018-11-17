@@ -241,7 +241,7 @@ function t.init()
   t.log("[DEBUG] Read file contents, trying to unserialize it", 4)
   coords = textutils.unserialize(contents)
   if type(coords) ~= "table" then
-    t.log("[FATAL] failed to unserialize contents, coords is not a table", 0)
+    t.log("[FATAL] failed to unserialize contents, coords is not a table, it is a "..type(coords), 0)
   end
 
   -- Sets coordanites
