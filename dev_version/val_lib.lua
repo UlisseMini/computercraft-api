@@ -527,6 +527,5 @@ function t.calcFuelForPos(posName)
     return math.abs(fuelNeeded)
   end
 end
--- Because its not defined at the top
 t.init()
 return t
