@@ -136,12 +136,12 @@ function t.cleanInventory()
   for i=1,16 do
     item = turtle.getItemDetail(i)
     -- Makes sure item exists to avoid nil errors.
-  if item and t.inTable(item.name, t.unWantedItems) then
-    turtle.select(i)
-    turtle.dropDown(item.count) -- Drops all of the unwanted item
+    if item and t.inTable(item.name, t.unWantedItems) then
+      turtle.select(i)
+      turtle.dropDown(item.count) -- Drops all of the unwanted item
+    end
   end
-    turtle.select(prevSlot) -- Leave no trace!
-  end
+  turtle.select(prevSlot) -- Leave no trace!
 end
 
 function t.writeToFile(msg, file, mode)

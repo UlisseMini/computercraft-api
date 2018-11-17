@@ -1,5 +1,7 @@
 -- Fake cc library used by my automatic tests
 -- Random is not working, i need a random seed
+-- TODO:
+-- Add fuel system instead of randomly returning true / false
 local math = require("math")
 local os   = require("os")
 local h    = require("helpers")

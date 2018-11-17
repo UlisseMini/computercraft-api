@@ -149,7 +149,6 @@ function Test.textutils()
   return defaultReturnValue
 end
 
-resetCoords()
 -- Run tests
 for testname, testcase in pairs(Test) do
   startTime = os.clock()
@@ -160,10 +159,11 @@ for testname, testcase in pairs(Test) do
 end
 
 checkResults(results)
-
 print(string.format("\nRan "..table.size(Test).." Tests in %.5fs", os.clock() - startTime))
 if testFailures > 0 then
   print(testFailures.." Test failures")
 else
   print("OK")
 end
+-- cleanup
+resetCoords()
