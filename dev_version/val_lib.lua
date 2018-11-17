@@ -122,7 +122,7 @@ function t.dumpCoords()
 end
 
 function t.select(i)
-  selectedSlot = i
+  t.selectedSlot = i
   turtle.select(i)
 end
 
