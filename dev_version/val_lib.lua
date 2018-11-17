@@ -120,12 +120,11 @@ function t.dumpCoords()
 end
 
 function t.inTable(value, table)
-  for key, v in ipairs(table) do
-    if value == value then
+  for key, keyValue in pairs(table) do
+    if value == keyValue then
       return true
     end
   end
-  -- if its not in the table then
   return false
 end
 

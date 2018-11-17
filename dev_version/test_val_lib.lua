@@ -36,6 +36,29 @@ local function checkResults(re)
   end
 end
 
+function Test.inTable()
+  local testTable = {
+    "foo",
+    "bar",
+    2019,
+    "potato",
+  }
+
+  if t.inTable("poo poo pee pee man", testTable) then
+    return "t.inTable(\"poo poo pee pee man\") returned true expected false"
+  end
+
+  if t.inTable("foo", testTable) == false then
+    return "t.inTable(\"foo\") returned false expected true"
+  end
+
+  if t.inTable(2019, testTable) == false then
+    return "t.inTable(2019) returned false expected true"
+  end
+
+  return defaultReturnValue
+end
+
 function Test.positions()
   -- There is a *VERY* small chance of this test failing from every movement returning false.
   local startingPos = t.dumpCoords()

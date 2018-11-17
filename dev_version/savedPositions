@@ -1,8 +1,8 @@
 {
   start = {
-    y = -40,
-    x = 8,
-    z = 38,
-    orientation = 1,
+    y = 15,
+    x = -42,
+    z = -37,
+    orientation = 2,
   },
 }
