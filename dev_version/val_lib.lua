@@ -157,19 +157,19 @@ function t.writeToFile(msg, fileName, mode)
     mode = "a" -- By default append
   end
 
-  if file == nil then
-    t.log("[DEBUG] file to write to is nil, defaulting to "..t.logfile)
+  if fileName == nil then
+    t.log("[DEBUG] file to write to is nil, defaulting to "..t.logfile, 4)
     file = t.logfile -- default
   end
 
   if msg == nil then
-    t.log("[ERROR] msg is nil in function t.writeToFile")
+    t.log("[ERROR] msg is nil in function t.writeToFile", 1)
     return
   end
 
   file = fs.open(fileName, mode)
 
-  if file == nil then
+  if not file then
     t.log("[ERROR] Failed to open "..fileName, 0)
     return
   end
