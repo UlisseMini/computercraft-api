@@ -1,8 +1,0 @@
-{
-  start = {
-    y = -23,
-    x = -47,
-    z = 9,
-    orientation = 0,
-  },
-}
