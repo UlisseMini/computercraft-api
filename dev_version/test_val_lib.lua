@@ -17,6 +17,13 @@ local Test = {}
 
 t.debug_level = 3
 
+local function resetCoords()
+  -- Reset the coordanites
+  t.x, t.y, t.z, t.orientation = 0,0,0,0
+  -- Save the new coordanites to the file
+  t.saveCoords()
+end
+
 local function checkResults(re)
   for k, v in pairs(re) do
     local msg = "Test."..k.." - "..v
@@ -87,6 +94,38 @@ function Test.goto()
   return defaultReturnValue
 end
 
+function Test.calcFuelForPos()
+  resetCoords()
+  local fuelNeeded
+  t.saveCurrentPos("start")
+
+  fuelNeeded = t.calcFuelForPos("start")
+  if fuelNeeded ~= 0 then
+    return "fuelNeeded is "..tostring(fuelNeeded).." expected 0"
+  end
+
+  local x, y, z = 30, -19, 49
+  local o = t.orientation
+
+  -- Move around some
+  t.goto(x,y,z,o)
+
+  fuelNeeded = t.calcFuelForPos("start")
+  if fuelNeeded ~= 98 then
+    return "fuelNeeded is "..tostring(fuelNeeded).." expected 98"
+  end
+
+  -- Move some more
+  t.goto(-10,20,-30,0)
+
+  fuelNeeded = t.calcFuelForPos("start")
+  if fuelNeeded ~= 60 then
+    return "fuelNeeded is "..tostring(fuelNeeded).." expected 60"
+  end
+
+  return defaultReturnValue
+end
+
 function Test.textutils()
   local foo = {
     x = 32,
@@ -110,6 +149,7 @@ function Test.textutils()
   return defaultReturnValue
 end
 
+resetCoords()
 -- Run tests
 for testname, testcase in pairs(Test) do
   startTime = os.clock()

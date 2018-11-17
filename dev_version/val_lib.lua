@@ -56,6 +56,13 @@ function t.init()
 this function gets the correct coordanites from the t.coordsfile file.
 if the file does not exist, it will create it and initalize the coordanites to 0,0,0,0
 
+function t.calcFuelForPos(pos)
+this function returns how much fuel it will take to go to a position.
+it will fatal if the position does not exist.
+
+function t.saveCoords()
+Saves coordanites to t.coordsfile
+
 --]]
 local t = {}
 
@@ -179,7 +186,7 @@ function t.log(msg, msg_debug_level)
   end
   -- Terminate the program if the message level is fatal.
   if msg_debug_level == 0 then
-    print("Fatal error, read "..t.logfile.." for more info.")
+    print(msg)
     error()
   end
 end
@@ -246,9 +253,7 @@ function t.init()
 end
 
 -- Saves coordanites to file
-local function saveCords()
-  t.log("[DEBUG] saveCords function called.", 4)
-  t.log("[DEBUG] t.x = "..t.x.." t.y = "..t.y.." t.z = "..t.z.." t.orientation = "..t.orientation, 4)
+function t.saveCoords()
   local c = {
     x = t.x,
     y = t.y,
@@ -290,13 +295,13 @@ function t.turnRight()
   -- This "magic" math adds one to t.orientation unless t.orientation is 3, then it moves to 0.
   -- This could also be done with an if statement but this is cleaner imo
   t.orientation = (t.orientation + 1) % 4
-  saveCords()
+  t.saveCoords()
 end
 
 function t.turnLeft()
   turtle.turnLeft()
   t.orientation = (t.orientation - 1) % 4
-  saveCords()
+  t.saveCoords()
 end
 
 -- Looks to a direction, can be passed a string or a number
@@ -330,8 +335,8 @@ function t.forward()
       t.x = t.x + xDiff[t.orientation]
       t.z = t.z + zDiff[t.orientation]
 
-      t.log("[DEBUG] Calling saveCords from t.forward", 4)
-      saveCords()
+      t.log("[DEBUG] Calling t.saveCoords from t.forward", 4)
+      t.saveCoords()
       return true
     else
       -- If he failed to move return false and don't change the coords.
@@ -345,7 +350,7 @@ function t.up()
   if turtle.up() then
     t.y = t.y + 1
     t.log("[DEBUG] Trying to save coords to file after going up", 4)
-    saveCords()
+    t.saveCoords()
     return true
   else
     return false
@@ -355,7 +360,7 @@ end
 function t.down()
   if turtle.down() then
     t.y = t.y - 1
-    saveCords()
+    t.saveCoords()
     return true
   else
     return false
@@ -497,6 +502,24 @@ function t.goto(xTarget, yTarget, zTarget, orientationTarget)
   end
   -- Look to correct orientation
   t.look(orientationTarget)
+end
+
+function t.calcFuelForPos(posName)
+  if posName == nil then
+    t.log("[FATAL] pos is nil in t.calcFuelForPos", 0)
+  elseif not t.saved_positions[posName] then
+    t.log("[FATAL] t.saved_positions["..tostring(posName).."] Does not exist", 0)
+  else
+    local fuelNeeded = 0
+    pos = t.saved_positions[posName]
+
+    fuelNeeded = fuelNeeded + (math.abs(pos.x) - math.abs(t.x))
+    fuelNeeded = fuelNeeded + (math.abs(pos.y) - math.abs(t.y))
+    fuelNeeded = fuelNeeded + (math.abs(pos.z) - math.abs(t.z))
+
+    t.log("[INFO] "..tostring(fuelNeeded).." Fuel needed to go to "..posName.." From "..textutils.serialize(t.dumpCoords()))
+    return math.abs(fuelNeeded)
+  end
 end
 -- Because its not defined at the top
 t.init()
