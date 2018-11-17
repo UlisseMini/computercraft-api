@@ -150,7 +150,7 @@ function t.cleanInventory()
   turtle.select(prevSlot) -- Leave no trace!
 end
 
-function t.writeToFile(msg, file, mode)
+function t.writeToFile(msg, fileName, mode)
   -- Function used by logging function.
   -- i felt it was cleaner this way.
   if mode == nil then
@@ -167,10 +167,10 @@ function t.writeToFile(msg, file, mode)
     return
   end
 
-  file = fs.open(file, mode)
+  file = fs.open(fileName, mode)
 
   if file == nil then
-    t.log("[ERROR] Failed to open "..file, 0)
+    t.log("[ERROR] Failed to open "..fileName, 0)
     return
   end
 
