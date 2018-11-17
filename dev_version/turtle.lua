@@ -6,6 +6,7 @@ local math = require("math")
 local os   = require("os")
 local h    = require("helpers")
 
+local slot = h.rand(1,16)
 -- Some items for one to randomly be picked by randitem
 local items = {
   "minecraft:sand",
@@ -22,6 +23,9 @@ end
 -- Fake turtle api
 local turtle = {}
 
+function turtle.getSelectedSlot()
+  return slot
+end
 -- Moving functions will return true or false randomly
 function turtle.forward()
   return h.trueorfalse()

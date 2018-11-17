@@ -75,6 +75,7 @@ t.posfile = "savedPositions"
 local file -- Used for file management lower down
 t.saved_positions = {}
 
+t.selectedSlot = turtle.getSelectedSlot()
 t.blocks_dug = 0
 
 -- How to increment depending on the orientation
@@ -107,6 +108,7 @@ t.unWantedItems = {
   "minecraft:flint",
   "minecraft:dirt",
   "minecraft:sandstone",
+  "minecraft:gravel",
   "minecraft:sand"
 }
 
@@ -117,6 +119,11 @@ function t.dumpCoords()
     z = t.z,
     orientation = t.orientation,
   }
+end
+
+function t.select(i)
+  selectedSlot = i
+  turtle.select(i)
 end
 
 function t.inTable(value, table)
