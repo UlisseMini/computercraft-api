@@ -109,7 +109,12 @@ t.unWantedItems = {
   "minecraft:dirt",
   "minecraft:sandstone",
   "minecraft:gravel",
-  "minecraft:sand"
+  "minecraft:sand",
+	"minecraft:torch",
+	"minecraft:netherrack",
+	"minecraft:nether_brick",
+	"biomesoplenty:dirt",
+	"biomesoplenty:flower_1",
 }
 
 function t.dumpCoords()
