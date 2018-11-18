@@ -459,66 +459,62 @@ end
 
 -- Careful this breaks blocks.
 function t.goto(xTarget, yTarget, zTarget, orientationTarget)
-	if not xTarget or not yTarget or not zTarget or not orientationTarget then
-		t.log("[DEBUG] Here are all the params for the goto function:", 4)
-		t.log("xTarget="..xTarget.."yTarget="..yTarget.."zTarget="..zTarget.."orientationTarget="..orientationTarget, 4)
-		error("t.goto Can\"t travel to nil!, read logs for more info")
-	end
-	-- Moves to t.y
-	while yTarget < t.y do
-		while not t.down() do
-			while turtle.attackDown() do end
-			t.digDown()
-		end
-	end
+  if not xTarget or not yTarget or not zTarget or not orientationTarget then
+    t.log('[DEBUG] Here are all the params for the goto function:', 4)
+    t.log('xTarget='..xTarget..'yTarget='..yTarget..'zTarget='..zTarget..'orientationTarget='..orientationTarget, 4)
+    error('t.goto Can\'t travel to nil!, read logs for more info')
+  end
+  -- Moves to t.y
+  while yTarget < t.y do
+    t.digDown()
+    t.down()
+		while turtle.attackDown() do end
+  end
 
-	while yTarget > t.y do
-		while not t.up() do
-			while turtle.attackUp() do end
-			t.digUp()
-		end
-	end
+  while yTarget > t.y do
+    t.digUp()
+    t.up()
+		while turtle.attackUp() do end
+  end
 
-	-- Turns to correct t.orientation then moves forward until its at the right t.x cord
-	if xTarget < t.x then
-		t.look("west")
-		while zTarget < t.z do
-			while not t.forward() do
-				t.dig()
-				while turtle.attack() do end
-			end
-		end
-	end
+  -- Turns to correct t.orientation then moves forward until its at the right t.x cord
+  if xTarget < t.x then
+    t.look('west')
+    while xTarget < t.x do
+      t.dig()
+      t.forward()
+			while turtle.attack() do end
+    end
+  end
 
-	if xTarget > t.x then
-		t.look("east")
-			while not t.forward() do
-				t.dig()
-				while turtle.attack() do end
-			end
-	end
+  if xTarget > t.x then
+    t.look('east')
+    while xTarget > t.x do
+      t.dig()
+      t.forward()
+			while turtle.attack() do end
+    end
+  end
 
-	-- Turns to correct t.orientation then moves forward until its at the right t.z cord
-	if zTarget < t.z then
-		t.look("north")
-		while zTarget < t.z do
-			while not t.forward() do
-				t.dig()
-				while turtle.attack() do end
-			end
-		end
-	end
-
-	if zTarget > t.z then
-		t.look("south")
-		while zTarget < t.z do
-			while not t.forward() do
-				t.dig()
-				while turtle.attack() do end
-			end
-	end
-	-- Look to correct orientation
-	t.look(orientationTarget)
+  -- Turns to correct t.orientation then moves forward until its at the right t.z cord
+  if zTarget < t.z then
+    t.look('north')
+    while zTarget < t.z do
+      t.dig()
+      t.forward()
+			while turtle.attack() do end
+    end
+  end
+  if zTarget > t.z then
+    t.look('south')
+    while zTarget > t.z do
+      t.dig()
+      t.forward()
+			while turtle.attack() do end
+    end
+  end
+  -- Look to correct orientation
+  t.look(orientationTarget)
 end
 
 function t.calcFuelForPos(posName)

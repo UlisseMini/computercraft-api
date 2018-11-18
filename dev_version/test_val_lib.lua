@@ -19,9 +19,7 @@ t.debug_level = 3
 
 local function resetCoords()
   -- Reset the coordanites
-  t.x, t.y, t.z, t.orientation = 0,0,0,0
-  -- Save the new coordanites to the file
-  t.saveCoords()
+	t.goto(0,0,0,0)
 end
 
 local function checkResults(re)
