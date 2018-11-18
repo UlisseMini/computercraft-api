@@ -49,15 +49,28 @@ function turtle.turnLeft() end
 
 -- Digging functions
 function turtle.dig()
-  h.trueorfalse()
+  return h.trueorfalse()
 end
 
 function turtle.digUp()
-  h.trueorfalse()
+  return h.trueorfalse()
 end
 
 function turtle.digDown()
-  h.trueorfalse()
+  return h.trueorfalse()
+end
+
+-- Attacking functions
+function turtle.attackDown()
+  return h.trueorfalse()
+end
+
+function turtle.attackUp()
+  return h.trueorfalse()
+end
+
+function turtle.attack()
+  return h.trueorfalse()
 end
 
 

@@ -333,20 +333,15 @@ function t.look(direction)
 end
 
 function t.forward()
-    t.log("[DEBUG] t.forward called", 4)
-
     if turtle.forward() then
-      t.log("[DEBUG] turtle.forward() returned true, changing coords...", 4)
       -- Change t.x and t.z coords
       t.x = t.x + xDiff[t.orientation]
       t.z = t.z + zDiff[t.orientation]
 
-      t.log("[DEBUG] Calling t.saveCoords from t.forward", 4)
       t.saveCoords()
       return true
     else
       -- If he failed to move return false and don't change the coords.
-      t.log("[DEBUG] turtle.forward() returned false", 4)
       return false
     end
 end
@@ -466,11 +461,13 @@ function t.goto(xTarget, yTarget, zTarget, orientationTarget)
   -- Moves to t.y
   while yTarget < t.y do
     t.digDown()
+    while turtle.attackDown() do end
     t.down()
   end
 
   while yTarget > t.y do
     t.digUp()
+    while turtle.attackUp() do end
     t.up()
   end
 
@@ -479,6 +476,7 @@ function t.goto(xTarget, yTarget, zTarget, orientationTarget)
     t.look("west")
     while xTarget < t.x do
       t.dig()
+      while turtle.attack() do end
       t.forward()
     end
   end
@@ -487,6 +485,7 @@ function t.goto(xTarget, yTarget, zTarget, orientationTarget)
     t.look("east")
     while xTarget > t.x do
       t.dig()
+      while turtle.attack() do end
       t.forward()
     end
   end
@@ -496,6 +495,7 @@ function t.goto(xTarget, yTarget, zTarget, orientationTarget)
     t.look("north")
     while zTarget < t.z do
       t.dig()
+      while turtle.attack() do end
       t.forward()
     end
   end
@@ -503,6 +503,7 @@ function t.goto(xTarget, yTarget, zTarget, orientationTarget)
     t.look("south")
     while zTarget > t.z do
       t.dig()
+      while turtle.attack() do end
       t.forward()
     end
   end
