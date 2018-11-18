@@ -66,7 +66,7 @@ Saves coordanites to t.coordsfile
 --]]
 local t = {}
 
-t.debug_level = 4
+t.debug_level = 3
 
 t.logfile = "val_lib.log"
 t.coordsfile = "coords"
