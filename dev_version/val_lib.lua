@@ -114,6 +114,7 @@ t.unWantedItems = {
 	"minecraft:netherrack",
 	"minecraft:nether_brick",
 	"biomesoplenty:dirt",
+	"biomesoplenty:grass",
 	"biomesoplenty:flower_1",
 }
 
