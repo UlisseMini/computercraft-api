@@ -26,15 +26,15 @@ local t = {}
 
 -- Debug level of messages to display. (see log function)
 -- I use level 1 as error 2 as Warning 3 as Info and 4 for debug.
-t.debug_level = 4
+t.debug_level = 0
 
--- Files
+-- files
 t.logfile = 'tLib.log'
 t.cordsfile = 'cords'
 t.posfile = 'savedPositions'
 
 local file -- Used for file management
-t.saved_positions = {}-- Table for saving positions
+t.saved_positions = {} -- Table for saving positions
 
 t.blocks_dug = 0 -- Blocks dug
 
