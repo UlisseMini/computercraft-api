@@ -22,47 +22,6 @@ after you move, i might add this later but for now its up to you! ;)
 TODO:
 	Write saved positions to a file and read from it on startup.
 	Add automatic gps support, maybe with a bool config variable to turn it on or off.
-
-Here is an index that i think some programmers will find useful
-
-function t.dumpCoords()
-returns the current coordanaites in a table \w orientation
-
-function t.inTable(value, table)
-Checks if a value is in a table.
-
-function t.cleanInventory()
-Tries to clean the turtles inventory by-
-throwing out unwanted items.
-defined in the t.unWantedItems list.
-
-function t.writeToFile(msg, file, mode)
-valid modes are "a", append and "w", overwrite
-simply writes to the file in args and cleanly closes it afterwards.
-
-function t.log(msg, msg_debug_level)
-logs messages, 5 levels starting at 0.
-4: [DEBUG]
-3: [INFO]
-2: [WARNING]
-1: [ERROR]
-0: [FATAL] (Will terminate the program after logging)
-Will not log the message if t.debug_level is less then msg_debug_level.
-
-function t.savePositionsToFile()
-Writes t.saved_positions to t.posfile
-
-function t.init()
-this function gets the correct coordanites from the t.coordsfile file.
-if the file does not exist, it will create it and initalize the coordanites to 0,0,0,0
-
-function t.calcFuelForPos(pos)
-this function returns how much fuel it will take to go to a position.
-it will fatal if the position does not exist.
-
-function t.saveCoords()
-Saves coordanites to t.coordsfile
-
 --]]
 local t = {}
 
@@ -336,6 +295,13 @@ function t.look(direction)
 	else
 		t.turnLeft()
 	end
+end
+
+-- temporary fix, later on i should implement backward coordanites (using math)
+function t.back()
+	t.turnRight()
+	t.turnRight()
+	t.forward()
 end
 
 function t.forward()
