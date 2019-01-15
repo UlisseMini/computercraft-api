@@ -1,0 +1,65 @@
+[WARNING] t.coordsfile does not exist
+[INFO] Creating coordsfile...
+[WARNING] msg_debug_level is nil, defaulting to level 3 message info.
+[INFO] 0 Fuel needed to go to start From {
+  y = 0,
+  x = 0,
+  z = 0,
+  orientation = 0,
+}
+[WARNING] msg_debug_level is nil, defaulting to level 3 message info.
+[INFO] -98 Fuel needed to go to start From {
+  y = -19,
+  x = 30,
+  z = 49,
+  orientation = 0,
+}
+[WARNING] msg_debug_level is nil, defaulting to level 3 message info.
+[INFO] -60 Fuel needed to go to start From {
+  y = 20,
+  x = -10,
+  z = -30,
+  orientation = 0,
+}
+[WARNING] msg_debug_level is nil, defaulting to level 3 message info.
+[INFO] 0 Fuel needed to go to start From {
+  y = 0,
+  x = 0,
+  z = 0,
+  orientation = 0,
+}
+[WARNING] msg_debug_level is nil, defaulting to level 3 message info.
+[INFO] -98 Fuel needed to go to start From {
+  y = -19,
+  x = 30,
+  z = 49,
+  orientation = 0,
+}
+[WARNING] msg_debug_level is nil, defaulting to level 3 message info.
+[INFO] -60 Fuel needed to go to start From {
+  y = 20,
+  x = -10,
+  z = -30,
+  orientation = 0,
+}
+[WARNING] msg_debug_level is nil, defaulting to level 3 message info.
+[INFO] 0 Fuel needed to go to start From {
+  y = 0,
+  x = 0,
+  z = 0,
+  orientation = 0,
+}
+[WARNING] msg_debug_level is nil, defaulting to level 3 message info.
+[INFO] -98 Fuel needed to go to start From {
+  y = -19,
+  x = 30,
+  z = 49,
+  orientation = 0,
+}
+[WARNING] msg_debug_level is nil, defaulting to level 3 message info.
+[INFO] -60 Fuel needed to go to start From {
+  y = 20,
+  x = -10,
+  z = -30,
+  orientation = 0,
+}
