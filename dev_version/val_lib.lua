@@ -302,6 +302,8 @@ function t.back()
 	t.turnRight()
 	t.turnRight()
 	t.forward()
+	t.turnRight()
+	t.turnRight()
 end
 
 function t.forward()
