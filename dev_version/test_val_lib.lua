@@ -147,6 +147,10 @@ function Test.calcFuelForPos()
   return defaultReturnValue
 end
 
+-- Test the turtle going backward correctly.
+function Test.back()
+end
+
 function Test.textutils()
   local foo = {
     x = 32,
