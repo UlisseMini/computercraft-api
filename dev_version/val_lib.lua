@@ -34,7 +34,6 @@ t.posfile = "savedPositions"
 local file -- Used for file management lower down
 t.saved_positions = {}
 
-t.selectedSlot = turtle.getSelectedSlot()
 t.blocks_dug = 0
 
 -- How to increment depending on the orientation
@@ -84,11 +83,6 @@ function t.dumpCoords()
 		z = t.z,
 		orientation = t.orientation,
 	}
-end
-
-function t.select(i)
-	t.selectedSlot = i
-	turtle.select(i)
 end
 
 function t.inTable(value, table)
@@ -342,30 +336,20 @@ function t.down()
 	end
 end
 
-function t.digDown()
-	if turtle.digDown() then
-		t.blocks_dug = t.blocks_dug + 1
-		return true
-	else
-		return false
-	end
+local function digFunc(dig)
+  return function()
+    if dig() then
+      t.blocks_dug = t.blocks_dug + 1
+      return true
+    else
+      return false
+    end
+  end
 end
-function t.dig()
-	if turtle.dig() then
-		t.blocks_dug = t.blocks_dug + 1
-		return true
-	else
-		return false
-	end
-end
-function t.digUp()
-	if turtle.digUp() then
-		t.blocks_dug = t.blocks_dug + 1
-		return true
-	else
-		return false
-	end
-end
+
+t.digDown = digFunc(turtle.digDown)
+t.digUp   = digFunc(turtle.digUp)
+t.dig     = digFunc(turtle.dig)
 
 -- This function saves the turtles position so it can be returned to later.
 function t.saveCurrentPos(name)
