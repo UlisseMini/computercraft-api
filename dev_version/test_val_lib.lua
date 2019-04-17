@@ -16,8 +16,8 @@ local test = {}
 
 t.debug_level = 3
 
+-- Reset the coordanites
 local function resetCoords()
-  -- Reset the coordanites
 	t.moveTo(0,0,0,0)
 end
 
