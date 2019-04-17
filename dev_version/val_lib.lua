@@ -418,19 +418,19 @@ function t.getPos()
 	end
 end
 
-function t.gotoPos(name)
+function t.moveToPos(name)
 	if t.saved_positions[name] == nil then error("[ERROR] t.saved_positions["..name.."] is nil") end
 	for i,v in ipairs(t.saved_positions[name]) do print(i,v) end -- temp
 
-	t.goto(t.saved_positions[name].x, t.saved_positions[name].y, t.saved_positions[name].z, t.saved_positions[name].orientation)
+	t.moveTo(t.saved_positions[name].x, t.saved_positions[name].y, t.saved_positions[name].z, t.saved_positions[name].orientation)
 end
 
 -- Careful this breaks blocks.
-function t.goto(xTarget, yTarget, zTarget, orientationTarget)
+function t.moveTo(xTarget, yTarget, zTarget, orientationTarget)
   if not xTarget or not yTarget or not zTarget or not orientationTarget then
-    t.log('[DEBUG] Here are all the params for the goto function:', 4)
+    t.log('[DEBUG] Here are all the params for the moveTo function:', 4)
     t.log('xTarget='..xTarget..'yTarget='..yTarget..'zTarget='..zTarget..'orientationTarget='..orientationTarget, 4)
-    error('t.goto Can\'t travel to nil!, read logs for more info')
+    error('t.moveTo Can\'t travel to nil!, read logs for more info')
   end
   -- Moves to t.y
   while yTarget < t.y do
