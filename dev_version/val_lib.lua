@@ -25,13 +25,10 @@ TODO:
 --]]
 local t = {}
 
-t.debug_level = 3
-
 t.logfile = "val_lib.log"
 t.coordsfile = "coords"
 t.posfile = "savedPositions"
 
-local file -- Used for file management lower down
 t.saved_positions = {}
 
 t.blocks_dug = 0
@@ -76,6 +73,12 @@ t.unWantedItems = {
 	"biomesoplenty:flower_1",
 }
 
+local function writeFile(data, file, mode)
+  local f = assert( io.open(file, mode))
+  f:write(data)
+  f:close()
+end
+
 function t.dumpCoords()
 	return {
 		x = t.x,
@@ -106,105 +109,63 @@ function t.cleanInventory()
 			turtle.dropDown(item.count) -- Drops all of the unwanted item
 		end
 	end
-	turtle.select(prevSlot) -- Leave no trace!
+	turtle.select(prevSlot)
 end
 
-function t.writeToFile(msg, fileName, mode)
-	-- Function used by logging function.
-	-- i felt it was cleaner this way.
-	if mode == nil then
-		mode = "a" -- By default append
-	end
+local function logFunc(prefix)
+  return function(s, ...)
+    local msg = prefix..s:format(...)
 
-	if fileName == nil then
-		t.log("[DEBUG] file to write to is nil, defaulting to "..t.logfile, 4)
-		file = t.logfile -- default
-	end
-
-	if msg == nil then
-		t.log("[ERROR] msg is nil in function t.writeToFile", 1)
-		return
-	end
-
-	file = fs.open(fileName, mode)
-
-	if not file then
-		t.log("[ERROR] Failed to open "..fileName, 0)
-		return
-	end
-
-	file.write(msg.."\n") -- Adds newline
-	file.close()
+		local f = assert(io.open(t.logfile, "a"))
+		f:write(msg..'\n')
+		f:close()
+  end
 end
 
-function t.log(msg, msg_debug_level)
-	-- Logging function
-
-	if msg_debug_level == nil then
-		t.writeToFile("[WARNING] msg_debug_level is nil, defaulting to level 3 message info.", t.logfile)
-		-- As a param this is already local.
-		msg_debug_level = 3
-	end
-
-	if msg_debug_level <= t.debug_level then
-		t.writeToFile(msg, t.logfile)
-	end
-	-- Terminate the program if the message level is fatal.
-	if msg_debug_level == 0 then
-		print(msg)
-		error()
-	end
-end
+t.debug = logFunc '[DEBUG] '
 
 -- Get coords from file if file does not exist create one and set coords to 0,0,0,0
 function t.init()
-	local coords
-	local contents
 	if t.coordsfile == nil then
-		t.log("[ERROR] t.coordsfile is nil", 1)
-		t.log("[WARNING] Without a coords file persistance will fail", 2)
-		return -- Breaks from this function
+		error "t.coordsfile is nil"
 	end
 
+  -- Create coords file if needed.
 	if not fs.exists(t.coordsfile) then
-		t.log("[WARNING] t.coordsfile does not exist", 2)
-		t.log("[INFO] Creating coordsfile...", 3)
-		-- Creates coords file with 0,0,0,0 as values.
-		t.writeToFile(textutils.serialize(
-		{
+		t.debug("t.coordsfile does not exist, creating it...")
+		local f = assert(io.open(t.coordsfile, 'w'))
+		f:write(textutils.serialize({
 			x = 0,
 			y = 0,
 			z = 0,
 			orientation = 0
-		}),
-		t.coordsfile,
-		"w")
+		}))
+    f:close()
 
+    -- Make sure it has been created.
 		if not fs.exists(t.coordsfile) then
-			t.log("[FATAL] Failed to create "..t.coordsfile, 0)
+			error("Failed to create "..t.coordsfile)
 		end
 	end
 
-	file = fs.open(t.coordsfile, "r") -- Opens coordsfile for reading.
-	if file == nil then
-		t.log("[FATAL] Failed to open coordsfile, file is nil", 0)
-	end
-
-	contents = file.readAll()
-	file.close()
+	local f = assert(io.open(t.coordsfile, "r"))
+	local contents = f:read("*all")
+	f:close()
 
 	if contents == nil then
-		t.log("[FATAL] Failed to read file contents", 0)
+		error "Failed to read file contents"
 	end
 
-	t.log("[DEBUG] Read file contents, trying to unserialize it", 4)
-	coords = textutils.unserialize(contents)
+	t.debug("Read file contents, trying to unserialize it")
+	t.debug("contents = %q", contents)
+	local coords = textutils.unserialize(contents)
 	if type(coords) ~= "table" then
-		t.log("[FATAL] failed to unserialize contents, coords is not a table, it is a "..type(coords), 0)
+		error(
+		  "failed to unserialize contents, coords is not a table, it is a "..type(coords))
 	end
 
 	-- Sets coordanites
-	t.log("[DEBUG] Got coordanites from file, they are\n"..textutils.serialize(coords), 4)
+	t.debug("Got coordanites from file, they are\n"..textutils.serialize(coords))
 	t.x = coords.x
 	t.y = coords.y
 	t.z = coords.z
@@ -227,8 +188,10 @@ function t.saveCoords()
 	}
 	c = textutils.serialize(c)
 
-	t.log("[DEBUG] Updating "..t.coordsfile.."\n"..c, 4)
-	t.writeToFile(c, t.coordsfile, "w")
+	t.debug("Updating "..t.coordsfile.."\n"..c)
+	assert(io.open(t.coordsfile, "w"))
+	  :write(c)
+	  :close()
 end
 
 local function orientationToNumber(orientationStr)
@@ -244,12 +207,12 @@ end
 local function orientationToString(orientationInt)
 	-- Checks to see if orientationInt is a number
 	if type(orientationInt) ~= "number" then
-		t.log("[FATAL] orientationInt is not a number", 0)
+		error "orientationInt is not a number"
 	end
 	if orientations[orientationInt] then
 		return t.orientations[orientationInt]
 	else
-		print("[FATAL] orientation is invalid", 0)
+		print("orientation is invalid", 0)
 		print("orientationInt = "..orientationInt)
 	end
 end
@@ -315,10 +278,10 @@ function t.forward()
 end
 
 function t.up()
-	t.log("[DEBUG] t.up function called", 4)
+	t.debug("t.up function called")
 	if turtle.up() then
 		t.y = t.y + 1
-		t.log("[DEBUG] Trying to save coords to file after going up", 4)
+		t.debug("Trying to save coords to file after going up")
 		t.saveCoords()
 		return true
 	else
@@ -368,33 +331,34 @@ function t.saveCurrentPos(name)
 end
 
 function t.savePositionsToFile()
-	t.writeToFile(textutils.serialize(t.saved_positions), t.posfile, "w")
+	writeFile(textutils.serialize(t.saved_positions), t.posfile, "w")
 end
 
 function t.getSavedPositions()
 	if fs.exists(t.posfile) then
-		file = fs.open(t.posfile, "r")
+		local file = fs.open(t.posfile, "r")
 		local data = file.readAll()
 		file.close()
 
 		local positions = textutils.unserialize(data)
 		if type(positions) ~= "table" then
-			t.log("[ERROR] Failed to unserialize positions", 1)
-			return nil
+			error "[ERROR] Failed to unserialize positions"
 		end
 
 		return positions
 	else
 		-- Create one
 		local positions = {}
-		t.writeToFile(textutils.serialize(positions), t.posfile, "w")
+		local f = assert(io.open(t.posfile, 'w'))
+		f:write(textutils.serialize(positions))
+		f:close()
 		return positions
 	end
 end
 
 function t.getPos()
 	if fs.exists(t.posfile) then
-		file = fs.open(t.posfile, "r")
+		local file = fs.open(t.posfile, "r")
 		t.saved_positions = textutils.unserialize(file.readAll())
 		file.close()
 	else
@@ -412,9 +376,9 @@ end
 -- Careful this breaks blocks.
 function t.moveTo(xTarget, yTarget, zTarget, orientationTarget)
   if not xTarget or not yTarget or not zTarget or not orientationTarget then
-    t.log('[DEBUG] Here are all the params for the moveTo function:', 4)
-    t.log('xTarget='..xTarget..'yTarget='..yTarget..'zTarget='..zTarget..'orientationTarget='..orientationTarget, 4)
-    error('t.moveTo Can\'t travel to nil!, read logs for more info')
+    t.debug('Here are all the params for the moveTo function:')
+    t.debug('xTarget='..xTarget..'yTarget='..yTarget..'zTarget='..zTarget..'orientationTarget='..orientationTarget, 4)
+    error("t.moveTo Can't travel to nil!, read logs for more info")
   end
   -- Moves to t.y
   while yTarget < t.y do
@@ -471,9 +435,9 @@ end
 
 function t.calcFuelForPos(posName)
 	if posName == nil then
-		t.log("[FATAL] pos is nil in t.calcFuelForPos", 0)
+		t.debug("pos is nil in t.calcFuelForPos")
 	elseif not t.saved_positions[posName] then
-		t.log("[FATAL] t.saved_positions["..tostring(posName).."] Does not exist", 0)
+		t.debug("t.saved_positions["..tostring(posName).."] Does not exist")
 	else
 		local fuelNeeded = 0
 		pos = t.saved_positions[posName]
@@ -482,7 +446,6 @@ function t.calcFuelForPos(posName)
 		fuelNeeded = fuelNeeded + (math.abs(pos.y) - math.abs(t.y))
 		fuelNeeded = fuelNeeded + (math.abs(pos.z) - math.abs(t.z))
 
-		t.log("[INFO] "..tostring(fuelNeeded).." Fuel needed to go to "..posName.." From "..textutils.serialize(t.dumpCoords()))
 		return math.abs(fuelNeeded)
 	end
 end
